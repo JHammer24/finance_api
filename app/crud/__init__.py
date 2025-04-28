@@ -22,7 +22,7 @@ from goal import (
     update_goal,
     update_goal_progress
 )
-from transactions import (
+from transaction import (
     get_transaction,
     get_transactions_by_category,
     get_transactions_by_user,
