@@ -1,14 +1,14 @@
 from fastapi import FastAPI
-from database import engine
-import models
-from api import (
+from .database import engine, get_db
+from . import models
+from .api import (
     users,
     categories,
     transactions,
     budgets,
     goals
 )
-from auth.router import router as auth_router
+from .auth.router import router as auth_router
 
 models.Base.metadata.create_all(bind=engine)
 

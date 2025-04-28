@@ -1,4 +1,4 @@
-from budget import (
+from .budget import (
     get_budget,
     get_budgets_by_user,
     get_budget_by_category,
@@ -6,14 +6,14 @@ from budget import (
     update_budget,
     delete_budget
 )
-from category import (
+from .category import (
     get_category,
     get_categories,
     create_category,
     delete_category,
     update_category
 )
-from goal import (
+from .goal import (
     get_goal,
     get_active_goals,
     get_goals_by_user,
@@ -22,7 +22,7 @@ from goal import (
     update_goal,
     update_goal_progress
 )
-from transaction import (
+from .transaction import (
     get_transaction,
     get_transactions_by_category,
     get_transactions_by_user,
@@ -31,7 +31,7 @@ from transaction import (
     create_transaction,
     delete_transaction
 )
-from user import (
+from .user import (
     get_user,
     get_users,
     get_user_by_email,

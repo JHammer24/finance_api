@@ -5,7 +5,7 @@ from datetime import timedelta
 from ..database import get_db
 from ..schemas.user import UserCreate, User
 from ..crud.user import create_user, get_user_by_email
-from models import (
+from .models import (
     Token,
     authenticate_user,
     create_access_token,
