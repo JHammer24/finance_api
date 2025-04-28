@@ -25,7 +25,7 @@ def get_active_goals(db: Session, user_id: int, current_date: datetime = datetim
     )
 
 def create_goal(db: Session, goal: schemas.GoalCreate, user_id: int):
-    db_goal = models.Goal(**goal.dict(), user_id=user_id)
+    db_goal = models.Goal(**goal.model_dump(), user_id=user_id)
     db.add(db_goal)
     db.commit()
     db.refresh(db_goal)
@@ -34,7 +34,7 @@ def create_goal(db: Session, goal: schemas.GoalCreate, user_id: int):
 def update_goal(db: Session, goal_id: int, goal: schemas.GoalCreate):
     db_goal = db.query(models.Goal).filter(models.Goal.id == goal_id).first()
     if db_goal:
-        for key, value in goal.dict().items():
+        for key, value in goal.model_dump().items():
             setattr(db_goal, key, value)
         db.commit()
         db.refresh(db_goal)

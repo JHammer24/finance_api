@@ -24,7 +24,7 @@ def get_transactions_by_category(db: Session, category_id: int, skip: int = 0, l
     )
 
 def create_transaction(db: Session, transaction: schemas.TransactionCreate, user_id: int):
-    db_transaction = models.Transaction(**transaction.dict(), user_id=user_id)
+    db_transaction = models.Transaction(**transaction.model_dump(), user_id=user_id)
     db.add(db_transaction)
     db.commit()
     db.refresh(db_transaction)
@@ -33,7 +33,7 @@ def create_transaction(db: Session, transaction: schemas.TransactionCreate, user
 def update_transaction(db: Session, transaction_id: int, transaction: schemas.TransactionCreate):
     db_transaction = db.query(models.Transaction).filter(models.Transaction.id == transaction_id).first()
     if db_transaction:
-        for key, value in transaction.dict().items():
+        for key, value in transaction.model_dump().items():
             setattr(db_transaction, key, value)
         db.commit()
         db.refresh(db_transaction)

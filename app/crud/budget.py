@@ -24,7 +24,7 @@ def get_budget_by_category(db: Session, user_id: int, category_id: int):
     )
 
 def create_budget(db: Session, budget: schemas.BudgetCreate, user_id: int):
-    db_budget = models.Budget(**budget.dict(), user_id=user_id)
+    db_budget = models.Budget(**budget.model_dump(), user_id=user_id)
     db.add(db_budget)
     db.commit()
     db.refresh(db_budget)
@@ -33,7 +33,7 @@ def create_budget(db: Session, budget: schemas.BudgetCreate, user_id: int):
 def update_budget(db: Session, budget_id: int, budget: schemas.BudgetCreate):
     db_budget = db.query(models.Budget).filter(models.Budget.id == budget_id).first()
     if db_budget:
-        for key, value in budget.dict().items():
+        for key, value in budget.model_dump().items():
             setattr(db_budget, key, value)
         db.commit()
         db.refresh(db_budget)
