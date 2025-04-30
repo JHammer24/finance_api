@@ -6,7 +6,8 @@ from .api import (
     categories,
     transactions,
     budgets,
-    goals
+    goals,
+    analytics
 )
 from .auth.router import router as auth_router
 
@@ -20,6 +21,7 @@ app.include_router(categories.router, prefix="/categories", tags=["categories"])
 app.include_router(transactions.router, prefix="/transactions", tags=["transactions"])
 app.include_router(budgets.router, prefix="/budgets", tags=["budgets"])
 app.include_router(goals.router, prefix="/goals", tags=["goals"])
+app.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
 
 @app.get("/")
 def read_root():
