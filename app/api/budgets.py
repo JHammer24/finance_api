@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .. import schemas, crud
+from .. import schemas, crud, models
 from ..database import get_db
 from ..auth.models import get_current_active_user
 
@@ -13,6 +13,15 @@ def create_budget(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
+    db_category = db.query(models.Category).filter(
+        models.Category.id == budget.category_id
+    ).first()
+
+    if not db_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
     existing_budget = crud.get_budget_by_category(
         db, user_id=current_user.id, category_id=budget.category_id
     )
@@ -55,6 +64,15 @@ def update_budget(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
+    db_category = db.query(models.Category).filter(
+        models.Category.id == budget.category_id
+    ).first()
+
+    if not db_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
     db_budget = crud.get_budget(db, budget_id=budget_id)
     if db_budget and db_budget.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this budget")

@@ -5,6 +5,7 @@ from datetime import datetime
 from .. import schemas, crud
 from ..database import get_db
 from ..auth import get_current_user, get_current_active_user
+from .. import models
 
 router = APIRouter()
 
@@ -15,6 +16,15 @@ def create_transaction(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
+    db_category = db.query(models.Category).filter(
+        models.Category.id == transaction.category_id
+    ).first()
+
+    if not db_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
     return crud.create_transaction(db=db, transaction=transaction, user_id=current_user.id)
 
 
@@ -29,6 +39,14 @@ def read_transactions(
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     if category_id:
+        db_category = db.query(models.Category).filter(
+            models.Category.id == category_id
+        ).first()
+        if not db_category:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Category not found"
+            )
         return crud.get_transactions_by_category(db, category_id=category_id, skip=skip, limit=limit)
     elif start_date and end_date:
         if end_date < start_date:
@@ -83,7 +101,7 @@ def update_transaction(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this transaction"
         )
-    return update_transaction(db=db, transaction_id=transaction_id, transaction=transaction)
+    return crud.update_transaction(db=db, transaction_id=transaction_id, transaction=transaction)
 
 
 @router.delete("/{transaction_id}")
