@@ -14,7 +14,7 @@ def get_goals_by_user(db: Session, user_id: int, skip: int = 0, limit: int = 100
         .all()
     )
 
-def get_active_goals(db: Session, user_id: int, current_date: datetime = datetime.utcnow()):
+def get_active_goals(db: Session, user_id: int, current_date: datetime = datetime.now()):
     return (
         db.query(models.Goal)
         .filter(
