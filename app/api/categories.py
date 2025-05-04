@@ -13,6 +13,8 @@ def create_category(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
+    if category.type != 'income' or category.type != 'expense':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category type must be income or expense")
     return crud.create_category(db=db, category=category)
 
 
