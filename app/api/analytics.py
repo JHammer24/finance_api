@@ -23,7 +23,9 @@ def analyze_spending(
         current_user=Depends(get_current_active_user)
 ):
     if end_date < start_date:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="End date must be after start date")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="End date must be after start date")
 
     analyzer = FinanceAnalyzer(db)
     return analyzer.get_spending_analysis(
@@ -56,7 +58,9 @@ def get_financial_health(
         current_user=Depends(get_current_active_user)
 ):
     if months <= 0:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Months must be positive")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Months must be positive")
 
     analyzer = FinanceAnalyzer(db)
     return analyzer.get_financial_health(
