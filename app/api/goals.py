@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Body, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime
 from .. import schemas, crud
@@ -15,7 +15,9 @@ def create_goal(
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     if goal.deadline < datetime.now():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Deadline cannot be in the past")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Deadline cannot be in the past")
     return crud.create_goal(db=db, goal=goal, user_id=current_user.id)
 
 
@@ -40,9 +42,13 @@ def read_goal(
 ):
     db_goal = crud.get_goal(db, goal_id=goal_id)
     if db_goal is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Goal not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Goal not found")
     if db_goal.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this goal")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this goal")
     return db_goal
 
 
@@ -54,6 +60,10 @@ def update_goal(
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     db_goal = crud.get_goal(db, goal_id=goal_id)
+    if db_goal is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Goal not found")
     if db_goal and db_goal.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this goal")
     if goal.deadline < datetime.now():
@@ -64,15 +74,23 @@ def update_goal(
 @router.patch("/{goal_id}/add", response_model=schemas.Goal)
 def add_to_goal(
     goal_id: int,
-    amount: float,
+    amount: float = Body(..., embed=True),
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     db_goal = crud.get_goal(db, goal_id=goal_id)
+    if db_goal is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Goal not found")
     if db_goal and db_goal.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to modify this goal")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to modify this goal")
     if amount <= 0:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Amount must be positive")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Amount must be positive")
     return crud.update_goal_progress(db=db, goal_id=goal_id, amount=amount)
 
 
@@ -83,6 +101,12 @@ def delete_goal(
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     db_goal = crud.get_goal(db, goal_id=goal_id)
+    if db_goal is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Goal not found")
     if db_goal and db_goal.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this goal")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to delete this goal")
     return crud.delete_goal(db=db, goal_id=goal_id)
