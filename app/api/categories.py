@@ -13,8 +13,10 @@ def create_category(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
-    if category.type != 'income' or category.type != 'expense':
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Category type must be income or expense")
+    if category.type not in ('income', 'expense'):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Category type must be income or expense")
     return crud.create_category(db=db, category=category)
 
 
@@ -36,7 +38,9 @@ def read_category(
 ):
     db_category = crud.get_category(db, category_id=category_id)
     if db_category is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found")
     return db_category
 
 
@@ -47,6 +51,19 @@ def update_category(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
+    db_category = crud.get_category(db, category_id=category_id)
+    if db_category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
+
+    if category.type not in ('income', 'expense'):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Category type must be income or expense"
+        )
+
     return crud.update_category(db=db, category_id=category_id, category=category)
 
 
@@ -56,4 +73,11 @@ def delete_category(
     db: Session = Depends(get_db),
     current_user: schemas.User = Depends(get_current_active_user)
 ):
-    return crud.delete_category(db=db, category_id=category_id)
+    db_category = crud.get_category(db, category_id=category_id)
+    if db_category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found"
+        )
+
+    crud.delete_category(db=db, category_id=category_id)
