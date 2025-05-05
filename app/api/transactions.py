@@ -74,7 +74,9 @@ def read_transaction(
 ):
     db_transaction = crud.get_transaction(db, transaction_id=transaction_id)
     if db_transaction is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Transaction not found")
     if db_transaction.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
