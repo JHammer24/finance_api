@@ -51,9 +51,13 @@ def read_budget(
 ):
     db_budget = crud.get_budget(db, budget_id=budget_id)
     if db_budget is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found")
     if db_budget.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this budget")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this budget")
     return db_budget
 
 
@@ -74,8 +78,14 @@ def update_budget(
             detail="Category not found"
         )
     db_budget = crud.get_budget(db, budget_id=budget_id)
+    if db_budget is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found")
     if db_budget and db_budget.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this budget")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to update this budget")
     return crud.update_budget(db=db, budget_id=budget_id, budget=budget)
 
 
@@ -86,6 +96,12 @@ def delete_budget(
     current_user: schemas.User = Depends(get_current_active_user)
 ):
     db_budget = crud.get_budget(db, budget_id=budget_id)
+    if db_budget is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found")
     if db_budget and db_budget.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this budget")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to delete this budget")
     return crud.delete_budget(db=db, budget_id=budget_id)
