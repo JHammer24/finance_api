@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Session
 from datetime import datetime
+from sqlalchemy.orm import Session
 from .. import models, schemas
 
 def get_goal(db: Session, goal_id: int):

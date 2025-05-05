@@ -1,5 +1,4 @@
 from fastapi import status
-from .configtest import *
 
 
 def test_create_budget(client, auth_headers, budget_data):
@@ -48,7 +47,7 @@ def test_create_duplicate_budget(client, auth_headers, budget_data):
 def test_get_budgets(client, auth_headers, budget_data):
     """Тест получения списка бюджетов"""
     # Создаем бюджет
-    create_resp = client.post("/budgets/", json=budget_data, headers=auth_headers)
+    client.post("/budgets/", json=budget_data, headers=auth_headers)
 
     # Получаем список
     response = client.get("/budgets/", headers=auth_headers)

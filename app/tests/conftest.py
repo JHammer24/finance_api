@@ -1,13 +1,13 @@
+import os
+from datetime import datetime, timedelta
 import pytest
 from faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
 from ..main import app
 from ..database import Base, get_db
-import os
-from dotenv import load_dotenv
-from datetime import datetime, timedelta
 
 
 # Загрузка тестовых переменных окружения

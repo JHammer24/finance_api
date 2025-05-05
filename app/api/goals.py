@@ -1,6 +1,6 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, Body, HTTPException, status
 from sqlalchemy.orm import Session
-from datetime import datetime
 from .. import schemas, crud
 from ..database import get_db
 from ..auth.models import get_current_active_user
@@ -65,9 +65,13 @@ def update_goal(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Goal not found")
     if db_goal and db_goal.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this goal")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to update this goal")
     if goal.deadline < datetime.now():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Deadline cannot be in the past")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Deadline cannot be in the past")
     return crud.update_goal(db=db, goal_id=goal_id, goal=goal)
 
 

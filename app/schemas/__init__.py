@@ -3,7 +3,14 @@ from .category import CategoryCreate, Category
 from .goal import GoalCreate, Goal
 from .transaction import TransactionCreate, Transaction
 from .user import UserCreate, User
-from .analytics import CategorySpending, BudgetComparison, FinancialHealth, IncomeVsExpenses, GoalProgress, SpendingAnalysis
+from .analytics import (
+    CategorySpending,
+    BudgetComparison,
+    FinancialHealth,
+    IncomeVsExpenses,
+    GoalProgress,
+    SpendingAnalysis
+)
 
 __all__ = [
     "BudgetCreate",

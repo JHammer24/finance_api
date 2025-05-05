@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 from .. import schemas, crud
 from ..database import get_db
 from ..auth import get_current_user, get_current_active_user
@@ -47,7 +47,10 @@ def read_transactions(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Category not found"
             )
-        return crud.get_transactions_by_category(db, category_id=category_id, skip=skip, limit=limit)
+        return crud.get_transactions_by_category(db,
+                                                 category_id=category_id,
+                                                 skip=skip,
+                                                 limit=limit)
     elif start_date and end_date:
         if end_date < start_date:
             raise HTTPException(

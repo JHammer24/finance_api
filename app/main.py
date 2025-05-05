@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .database import engine, get_db
+from .database import engine
 from . import models
 from .api import (
     users,

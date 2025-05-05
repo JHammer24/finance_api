@@ -1,5 +1,4 @@
 from fastapi import status
-from .configtest import *
 
 
 def test_analyze_spending(client, auth_headers, analysis_dates, setup_analytics_data):
@@ -46,7 +45,7 @@ def test_analyze_spending_invalid_dates(client, auth_headers, analysis_dates):
     assert "End date must be after start date" in response.json()["detail"]
 
 
-def test_analyze_income_vs_expenses(client, auth_headers, analysis_dates, setup_analytics_data):
+def test_analyze_income_vs_expenses(client, auth_headers, analysis_dates):
     """Тест сравнения доходов и расходов"""
     response = client.get(
         "/analytics/income-vs-expenses",
@@ -66,7 +65,7 @@ def test_analyze_income_vs_expenses(client, auth_headers, analysis_dates, setup_
     assert "period" in data
 
 
-def test_get_financial_health(client, auth_headers, setup_analytics_data):
+def test_get_financial_health(client, auth_headers):
     """Тест получения финансового здоровья"""
     response = client.get(
         "/analytics/financial-health",

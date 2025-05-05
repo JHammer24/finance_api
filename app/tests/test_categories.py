@@ -1,5 +1,4 @@
 from fastapi import status
-from .configtest import *
 
 
 def test_create_category(client, auth_headers, category_data):
@@ -32,7 +31,7 @@ def test_create_category_invalid_type(client, auth_headers, category_data):
 def test_get_categories(client, auth_headers, category_data):
     """Тест получения списка категорий"""
     # Создаем категорию
-    create_resp = client.post("/categories/", json=category_data, headers=auth_headers)
+    client.post("/categories/", json=category_data, headers=auth_headers)
 
     # Получаем список
     response = client.get("/categories/", headers=auth_headers)

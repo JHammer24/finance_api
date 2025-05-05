@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Session
 from datetime import datetime
+from sqlalchemy.orm import Session
 from .. import models, schemas
 
 def get_transaction(db: Session, transaction_id: int):
@@ -31,7 +31,9 @@ def create_transaction(db: Session, transaction: schemas.TransactionCreate, user
     return db_transaction
 
 def update_transaction(db: Session, transaction_id: int, transaction: schemas.TransactionCreate):
-    db_transaction = db.query(models.Transaction).filter(models.Transaction.id == transaction_id).first()
+    db_transaction = db.query(models.Transaction).filter(
+        models.Transaction.id == transaction_id
+    ).first()
     if db_transaction:
         for key, value in transaction.model_dump().items():
             setattr(db_transaction, key, value)
@@ -40,7 +42,9 @@ def update_transaction(db: Session, transaction_id: int, transaction: schemas.Tr
     return db_transaction
 
 def delete_transaction(db: Session, transaction_id: int):
-    db_transaction = db.query(models.Transaction).filter(models.Transaction.id == transaction_id).first()
+    db_transaction = db.query(models.Transaction).filter(
+        models.Transaction.id == transaction_id
+    ).first()
     if db_transaction:
         db.delete(db_transaction)
         db.commit()

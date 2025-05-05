@@ -1,5 +1,10 @@
 from fastapi import status
-from .configtest import *
+from .conftest import (
+    client,
+    db,
+    setup_database,
+    valid_user_data,
+)
 
 def test_register_new_user(client, valid_user_data):
     """Тест регистрации нового пользователя"""

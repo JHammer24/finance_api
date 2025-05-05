@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
 from typing import Optional
+from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 from ..database import get_db
 from ..analytics.service import FinanceAnalyzer
 from ..schemas.analytics import (

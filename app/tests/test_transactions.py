@@ -1,6 +1,5 @@
-from fastapi import status
 from datetime import datetime, timedelta
-from .configtest import *
+from fastapi import status
 
 
 def test_create_transaction(client, auth_headers, transaction_data):
@@ -34,7 +33,7 @@ def test_create_transaction_invalid_category(client, auth_headers, transaction_d
 def test_get_transactions(client, auth_headers, transaction_data):
     """Тест получения списка транзакций"""
     # Создаем транзакцию
-    create_resp = client.post("/transactions/", json=transaction_data, headers=auth_headers)
+    client.post("/transactions/", json=transaction_data, headers=auth_headers)
 
     # Получаем список
     response = client.get("/transactions/", headers=auth_headers)
